@@ -3,16 +3,14 @@ from selenium.webdriver.common.by import By
 def test_create_category(driver):
     driver.get('https://demo.opencart.com/admin/')
     
-    # Войти в админ-панель
     driver.find_element(By.ID, 'input-username').send_keys('admin')
     driver.find_element(By.ID, 'input-password').send_keys('password')
     driver.find_element(By.XPATH, '//*[@id="content"]/div/div/div/div/div[2]/form/div[2]/button').click()
-
-    # Перейти в раздел «Категории»
+    
+    
     driver.get('https://demo.opencart.com/admin/index.php?route=catalog/category')
     driver.find_element(By.XPATH, '//*[@id="content"]/div[1]/div/div/a').click()
 
-    # Заполнить данные категории «Devices»
     driver.find_element(By.ID, 'input-name1').send_keys('Devices')
     driver.find_element(By.ID, 'input-meta-title1').send_keys('Devices Category')
     driver.find_element(By.XPATH, '//*[@id="content"]/div[1]/div/div/button').click()
@@ -23,13 +21,11 @@ def test_add_products(driver):
     driver.get('https://demo.opencart.com/admin/index.php?route=catalog/product')
     driver.find_element(By.XPATH, '//*[@id="content"]/div[1]/div/div/a').click()
 
-    # Добавляем 2 мыши
     for name in ['Gaming Mouse', 'Wireless Mouse']:
         driver.find_element(By.ID, 'input-name1').send_keys(name)
         driver.find_element(By.ID, 'input-meta-title1').send_keys(name)
         driver.find_element(By.XPATH, '//*[@id="content"]/div[1]/div/div/button').click()
 
-    # Добавляем 2 клавиатуры
     for name in ['Mechanical Keyboard', 'Wireless Keyboard']:
         driver.find_element(By.ID, 'input-name1').send_keys(name)
         driver.find_element(By.ID, 'input-meta-title1').send_keys(name)

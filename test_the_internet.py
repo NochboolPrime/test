@@ -16,11 +16,9 @@ class TestTheInternet:
         Переход на страницу логина, ввод неверных учетных данных и проверка сообщения об ошибке.
         """
         driver.get(BASE_URL + "login")
-        # Заполняем поля username и password
         driver.find_element(By.ID, "username").send_keys("wronguser")
         driver.find_element(By.ID, "password").send_keys("wrongpass")
         driver.find_element(By.CSS_SELECTOR, "button.radius").click()
-        # Ждем появления сообщения об ошибке
         error = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, "flash"))
         )
@@ -34,7 +32,6 @@ class TestTheInternet:
         driver.get(BASE_URL + "checkboxes")
         checkboxes = driver.find_elements(By.CSS_SELECTOR, "input[type='checkbox']")
         assert len(checkboxes) == 2
-        # Если первый чекбокс не выбран – кликаем, иначе снимаем выделение у второго
         if not checkboxes[0].is_selected():
             checkboxes[0].click()
             assert checkboxes[0].is_selected()
@@ -97,11 +94,9 @@ class TestTheInternet:
         Переход на страницу File Upload, загрузка файла и проверка успешной загрузки.
         """
         driver.get(BASE_URL + "upload")
-        # Создадим временный файл для загрузки, если его нет
         file_path = os.path.join(os.getcwd(), "test_upload.txt")
         with open(file_path, "w") as f:
             f.write("This is a test file for upload.")
-        # Находим элемент input и передаём путь к файлу
         upload_input = driver.find_element(By.ID, "file-upload")
         upload_input.send_keys(file_path)
         driver.find_element(By.ID, "file-submit").click()
@@ -109,7 +104,6 @@ class TestTheInternet:
             EC.visibility_of_element_located((By.TAG_NAME, "h3"))
         ).text
         assert "File Uploaded!" in header_text
-        # Очистим временный файл
         os.remove(file_path)
 
     def test_drag_and_drop(self, driver):
@@ -121,7 +115,6 @@ class TestTheInternet:
         driver.get(BASE_URL + "drag_and_drop")
         source = driver.find_element(By.XPATH, "//*[@id='columns']/div[1]")
         target = driver.find_element(By.XPATH, "//*[@id='columns']/div[2]")
-        # JavaScript функция для перетаскивания
         js_drag_drop = """
         function simulateDragDrop(sourceNode, destinationNode) {
             var EVENT_TYPES = {
@@ -163,10 +156,8 @@ class TestTheInternet:
         simulateDragDrop(arguments[0], arguments[1]);
         """
         driver.execute_script(js_drag_drop, source, target)
-        # После DnD текст в блоках должен поменяться местами.
         col1_text = driver.find_element(By.XPATH, "//*[@id='columns']/div[1]").text
         col2_text = driver.find_element(By.XPATH, "//*[@id='columns']/div[2]").text
-        # Если перетаскивание сработало – ожидаем, что блок A теперь содержит "B"
         assert "B" in col1_text or "A" in col2_text
 
     def test_infinite_scroll(self, driver):
@@ -175,12 +166,10 @@ class TestTheInternet:
         Переход на страницу Infinite Scroll, скролл вниз и проверка появления нового контента.
         """
         driver.get(BASE_URL + "infinite_scroll")
-        # Получаем начальное количество параграфов
         paragraphs = driver.find_elements(By.CSS_SELECTOR, ".jscroll-added p")
         initial_count = len(paragraphs)
-        # Скроллим вниз
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)  # Ждем подгрузку нового контента
+        time.sleep(2)  
         new_paragraphs = driver.find_elements(By.CSS_SELECTOR, ".jscroll-added p")
         assert len(new_paragraphs) > initial_count
 

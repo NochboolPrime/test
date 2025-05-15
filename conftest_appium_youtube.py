@@ -1,4 +1,3 @@
-# conftest_appium_youtube.py
 import pytest
 from appium import webdriver
 

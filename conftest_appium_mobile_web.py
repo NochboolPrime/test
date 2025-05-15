@@ -1,4 +1,3 @@
-# conftest_appium_mobile_web.py
 import pytest
 from appium import webdriver
 
